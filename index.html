@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>The Quiet Mission — Q4 2025</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A quiet signal in a noisy world. The beginning of something bigger.">
+  <style>
+    :root { --bg:#ffffff; --fg:#0b0b0b; --muted:#6b7280; --link:#0a66c2; }
+    * { box-sizing: border-box; }
+    html,body { margin:0; padding:0; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif; }
+    .wrap { max-width:720px; margin:12vh auto 10vh; padding:0 20px; }
+    h1 { font-size:clamp(28px,6vw,44px); line-height:1.15; margin:0 0 14px; }
+    p.lead { font-size:clamp(17px,2.8vw,20px); color:var(--muted); margin:0 0 24px; }
+    .card { border:1px solid #e5e7eb; border-radius:14px; padding:18px; }
+    .muted { color:var(--muted); }
+    a { color:var(--link); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    footer { margin-top:48px; color:var(--muted); font-size:14px; }
+    .bridge { margin-top:18px; font-size:15px; }
+    form input[type="email"]{ width:100%; padding:12px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:16px; }
+    form button{ margin-top:10px; width:100%; padding:12px 14px; border:0; border-radius:10px; background:#111827; color:#fff; font-size:16px; cursor:pointer; }
+    form button:hover{ background:#0b1220; }
+  </style>
+</head>
+<body>
+  <main class="wrap" role="main">
+    <h1>Something new is coming in Q4&nbsp;2025.</h1>
+    <p class="lead">Be first to hear about the first sticker drop and quiet breadcrumbs.</p>
+
+    <section class="card" aria-labelledby="signup">
+      <h2 id="signup" style="margin:0 0 10px;font-size:18px;">Get the first signal</h2>
+      <!-- EMAIL FORM EMBED: paste your provider's embed below -->
+      <form action="#" method="post" onsubmit="return false" aria-label="Email signup">
+        <label class="muted" for="email">Email address</label><br>
+        <input id="email" name="email" type="email" placeholder="you@example.com" required>
+        <button type="submit" aria-label="Join the list">Join the list</button>
+      </form>
+      <p class="bridge">Curious about the dream behind this? Visit <a href="https://longlight.org">Longlight.org</a>.</p>
+    </section>
+
+    <footer>
+      © 2025 Longlight • The story is still being written.
+    </footer>
+  </main>
+</body>
+</html>
