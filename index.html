@@ -30,12 +30,17 @@
 
     <section class="card" aria-labelledby="signup">
       <h2 id="signup" style="margin:0 0 10px;font-size:18px;">Get the first signal</h2>
-      <!-- EMAIL FORM EMBED: paste your provider's embed below -->
-      <form action="#" method="post" onsubmit="return false" aria-label="Email signup">
+
+      <!-- Working email signup (Google Apps Script endpoint) -->
+      <form id="tqm-signup" action="https://script.google.com/macros/s/AKfycbwI_lkLCNjt01-WDXR_DRLltNglseViJ0RDbLRfaqgclha52j4iID_oj6h8uayWmtqe/exec" method="POST" aria-label="Email signup">
         <label class="muted" for="email">Email address</label><br>
         <input id="email" name="email" type="email" placeholder="you@example.com" required>
+        <!-- Honeypot (spam trap) -->
+        <input type="text" name="company" tabindex="-1" autocomplete="off" style="display:none">
         <button type="submit" aria-label="Join the list">Join the list</button>
+        <p id="tqm-msg" class="muted" style="margin-top:8px;"></p>
       </form>
+
       <p class="bridge">Curious about the dream behind this? Visit <a href="https://longlight.org">Longlight.org</a>.</p>
     </section>
 
@@ -43,5 +48,26 @@
       © 2025 Longlight • The story is still being written.
     </footer>
   </main>
+
+  <script>
+    // Minimal JS handler: posts to Apps Script and swaps in a success message.
+    // Make sure your Apps Script deployment is set to: Execute as "Me", Access "Anyone".
+    (function () {
+      const f = document.getElementById('tqm-signup');
+      const msg = document.getElementById('tqm-msg');
+
+      f.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        msg.textContent = 'Submitting…';
+        try {
+          await fetch(f.action, { method: 'POST', body: new FormData(f), mode: 'no-cors' });
+          f.innerHTML = '<p>Thanks — you’re on the list. Check your inbox.</p>';
+        } catch (err) {
+          msg.textContent = 'Network error. Please try again.';
+          msg.style.color = '#c33';
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
