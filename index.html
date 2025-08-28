@@ -31,12 +31,15 @@
     <section class="card" aria-labelledby="signup">
       <h2 id="signup" style="margin:0 0 10px;font-size:18px;">Get the first signal</h2>
 
-      <!-- Working email signup (Google Apps Script endpoint) -->
+      <!-- Email signup form -->
       <form id="tqm-signup" action="https://script.google.com/macros/s/AKfycbwI_lkLCNjt01-WDXR_DRLltNglseViJ0RDbLRfaqgclha52j4iID_oj6h8uayWmtqe/exec" method="POST" aria-label="Email signup">
         <label class="muted" for="email">Email address</label><br>
         <input id="email" name="email" type="email" placeholder="you@example.com" required>
         <!-- Honeypot (spam trap) -->
         <input type="text" name="company" tabindex="-1" autocomplete="off" style="display:none">
+        <!-- Attribution -->
+        <input type="hidden" name="referrer" value="">
+        <input type="hidden" name="utm" value="">
         <button type="submit" aria-label="Join the list">Join the list</button>
         <p id="tqm-msg" class="muted" style="margin-top:8px;"></p>
       </form>
@@ -49,25 +52,40 @@
     </footer>
   </main>
 
+  <!-- Fixed JS: real success check (no 'no-cors') -->
   <script>
-    // Minimal JS handler: posts to Apps Script and swaps in a success message.
-    // Make sure your Apps Script deployment is set to: Execute as "Me", Access "Anyone".
-    (function () {
-      const f = document.getElementById('tqm-signup');
-      const msg = document.getElementById('tqm-msg');
+  (() => {
+    const f   = document.getElementById('tqm-signup');
+    const msg = document.getElementById('tqm-msg');
+    const setStatus = (t, err=false) => { msg.textContent = t; msg.style.color = err ? '#c33' : '#6b7280'; };
 
-      f.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        msg.textContent = 'Submitting…';
-        try {
-          await fetch(f.action, { method: 'POST', body: new FormData(f), mode: 'no-cors' });
-          f.innerHTML = '<p>Thanks — you’re on the list. Check your inbox.</p>';
-        } catch (err) {
-          msg.textContent = 'Network error. Please try again.';
-          msg.style.color = '#c33';
+    // Fill attribution fields
+    const ref = f.querySelector('[name="referrer"]');
+    const utm = f.querySelector('[name="utm"]');
+    if (ref) ref.value = document.referrer || '';
+    if (utm) utm.value = location.search || '';
+
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      setStatus('Submitting…');
+      try {
+        // Send as x-www-form-urlencoded (simple, no preflight)
+        const body = new URLSearchParams(new FormData(f)).toString();
+        const res = await fetch(f.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body
+        });
+        if (res.ok) {
+          f.innerHTML = '<p>Thanks — you’re on the list.</p>';
+        } else {
+          setStatus('Submission failed. Please try again.', true);
         }
-      });
-    })();
+      } catch (err) {
+        setStatus('Network error. Please try again.', true);
+      }
+    });
+  })();
   </script>
 </body>
 </html>
